@@ -6,7 +6,7 @@ function buildVenmoUrl(): string {
   const { handle, note } = config.payments.venmo;
   const cleanHandle = handle?.replace("@", "") ?? "";
   const encodedNote = encodeURIComponent(note ?? "Honeymoon Fund");
-  return `https://venmo.com/${cleanHandle}?txn=pay&note=${encodedNote}`;
+  return `https://account.venmo.com/${cleanHandle}?txn=pay&note=${encodedNote}`;
 }
 
 function buildCashAppUrl(): string {
