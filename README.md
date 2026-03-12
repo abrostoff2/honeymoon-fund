@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Honeymoon Fund
 
-## Getting Started
+An open-source honeymoon fund website that couples can deploy in minutes — zero platform fees.
 
-First, run the development server:
+Instead of paying Zola, Honeyfund, or Hitchd 2.5–5% in fees, this is a config-driven Next.js template where payments go directly to you via Venmo/Zelle/CashApp (free) or Stripe Payment Links (~3% processing).
+
+**Total cost: $0** (or ~$12/year for a custom domain).
+
+## Quick Start
+
+1. **Fork this repo**
+
+2. **Edit `src/config.ts`** with your details:
+   - Couple names, wedding date, personal message
+   - Payment handles (Venmo, Zelle, CashApp, Stripe)
+   - Fund goal amount
+   - Site password (share on your invitation)
+
+3. **Add your photo** to `public/images/couple.jpg`
+
+4. **Deploy to Vercel** — click the button below or connect your fork:
+
+   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/honeymoon-fund)
+
+5. **(Optional)** Connect a custom domain (~$12/year)
+
+6. **Print a QR code** on your wedding invitations with the URL and password
+
+## Payment Methods
+
+| Method | Fees | How it works |
+|--------|------|-------------|
+| Venmo | **$0** | Deep link opens app with note pre-filled |
+| CashApp | **$0** | Deep link opens app |
+| Zelle | **$0** | Displays your registered email/phone |
+| Card / Apple Pay | **~3%** | Stripe Payment Link — money goes to your bank |
+
+## Customization
+
+Everything is configured in `src/config.ts`:
+
+- **Theme colors** — primary accent, background color
+- **Font style** — serif (elegant) or sans-serif (modern)
+- **Fund goal** — set to 0 to hide the progress bar
+- **Payment methods** — enable/disable any combination
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). The default password is `06-14-2026`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+Generates a fully static site in `out/` — no server needed.
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Next.js 16 (App Router, static export)
+- TypeScript
+- Tailwind CSS v4
+- Zero backend, zero database
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
