@@ -2,42 +2,45 @@
 
 import { config } from "@/config";
 
-function buildVenmoAppUrl(): string {
+function buildVenmoAppUrl(amount: number): string {
   const { handle, note } = config.payments.venmo;
   const cleanHandle = handle?.replace("@", "") ?? "";
   const encodedNote = encodeURIComponent(note ?? "Honeymoon Fund");
-  return `venmo://paycharge?txn=pay&recipients=${cleanHandle}&note=${encodedNote}`;
+  return `venmo://paycharge?txn=pay&recipients=${cleanHandle}&amount=${amount}&note=${encodedNote}`;
 }
 
-function buildVenmoWebUrl(): string {
+function buildVenmoWebUrl(amount: number): string {
   const { handle, note } = config.payments.venmo;
   const cleanHandle = handle?.replace("@", "") ?? "";
   const encodedNote = encodeURIComponent(note ?? "Honeymoon Fund");
-  return `https://account.venmo.com/${cleanHandle}?txn=pay&note=${encodedNote}`;
+  return `https://account.venmo.com/${cleanHandle}?txn=pay&amount=${amount}&note=${encodedNote}`;
 }
 
-function buildCashAppUrl(): string {
+function buildCashAppUrl(amount: number): string {
   const { handle } = config.payments.cashapp;
   const cleanHandle = handle?.replace("$", "") ?? "";
-  return `https://cash.app/$${cleanHandle}`;
+  return `https://cash.app/$${cleanHandle}/${amount}`;
 }
 
-function handleVenmoClick() {
-  const appUrl = buildVenmoAppUrl();
-  const webUrl = buildVenmoWebUrl();
+function handleVenmoClick(amount: number) {
+  const appUrl = buildVenmoAppUrl(amount);
+  const webUrl = buildVenmoWebUrl(amount);
 
   // Try to open the app; fall back to web after a short timeout
   const start = Date.now();
   window.location.href = appUrl;
   setTimeout(() => {
-    // If we're still here after 1.5s, the app didn't open — go to web
     if (Date.now() - start < 2000) {
       window.open(webUrl, "_blank");
     }
   }, 1500);
 }
 
-export default function PaymentOptions() {
+interface PaymentOptionsProps {
+  amount: number;
+}
+
+export default function PaymentOptions({ amount }: PaymentOptionsProps) {
   const venmoEnabled = config.payments.venmo.enabled;
   const cashappEnabled = config.payments.cashapp.enabled;
   const zelleEnabled = config.payments.zelle.enabled;
@@ -51,7 +54,7 @@ export default function PaymentOptions() {
       {/* Venmo */}
       {venmoEnabled && (
         <button
-          onClick={handleVenmoClick}
+          onClick={() => handleVenmoClick(amount)}
           className="flex w-full cursor-pointer items-center justify-center rounded-lg px-6 py-4 text-center text-white transition-opacity hover:opacity-90"
           style={{ backgroundColor: "#2D8B6E" }}
         >
@@ -65,7 +68,7 @@ export default function PaymentOptions() {
       {/* Cash App */}
       {cashappEnabled && (
         <a
-          href={buildCashAppUrl()}
+          href={buildCashAppUrl(amount)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex w-full items-center justify-center rounded-lg px-6 py-4 text-center text-white transition-opacity hover:opacity-90"
@@ -82,7 +85,7 @@ export default function PaymentOptions() {
       {zelleEnabled && (
         <div className="rounded-lg border border-[#2D8B6E]/20 bg-[#2D8B6E]/5 px-6 py-4 text-center">
           <div className="text-sm font-medium" style={{ color: "#2D8B6E" }}>
-            Gift via Zelle
+            Gift via Zelle — send ${amount.toLocaleString()}
           </div>
           <div className="mt-1 font-mono text-lg text-[#2C2C2C]">
             {config.payments.zelle.email}

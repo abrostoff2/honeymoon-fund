@@ -40,7 +40,7 @@ export interface FundConfig {
 export const config: FundConfig = {
   // Couple info
   coupleName: "Alex & Jack",
-  weddingDate: "June 14, 2026",
+  weddingDate: "June 21, 2026",
   heroImage: "/images/couple.jpg",
   message:
     "We're so excited to celebrate with you! In lieu of traditional gifts, we'd love your help making our dream honeymoon a reality.",
@@ -48,7 +48,7 @@ export const config: FundConfig = {
   // Fund
   fund: {
     title: "Our Honeymoon Fund",
-    description: "Help us explore Italy for two weeks!",
+    description: "Help us explore South America for 1 month!",
     goalAmount: 0,
     currentAmount: 0,
   },
