@@ -12,6 +12,7 @@ export interface FundConfig {
   weddingDate: string;
   heroImage: string;
   message: string;
+  coupleEmail: string;
 
   // Fund
   fund: {
@@ -42,6 +43,7 @@ export const config: FundConfig = {
   coupleName: "Alex & Jack",
   weddingDate: "June 21, 2026",
   heroImage: "/images/couple.jpg",
+  coupleEmail: process.env.COUPLE_EMAIL ?? "",
   message:
     "We're so excited to celebrate with you! In lieu of traditional gifts, we'd love your help making our dream honeymoon a reality.",
 

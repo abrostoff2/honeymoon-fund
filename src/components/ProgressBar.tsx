@@ -1,7 +1,22 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { config } from "@/config";
 
 export default function ProgressBar() {
-  const { goalAmount, currentAmount } = config.fund;
+  const { goalAmount } = config.fund;
+  const [currentAmount, setCurrentAmount] = useState(config.fund.currentAmount);
+
+  useEffect(() => {
+    fetch("/api/fund-summary")
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data.totalConfirmed === "number") {
+          setCurrentAmount(data.totalConfirmed);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   if (goalAmount <= 0) return null;
 

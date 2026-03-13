@@ -1,0 +1,45 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+model Contribution {
+  id            String    @id @default(cuid())
+  guestName     String
+  guestEmail    String
+  amount        Float
+  message       String?
+  paymentMethod String // "venmo" | "zelle" | "cashapp" | "stripe"
+  status        String    @default("pending") // "pending" | "confirmed" | "not_received"
+  ecardTemplate String?
+  ecardMessage  String?
+  fundItemId    String?
+  fundItem      FundItem? @relation(fields: [fundItemId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  confirmedAt   DateTime?
+  notes         String? // couple's private notes
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model FundItem {
+  id            String         @id @default(cuid())
+  title         String
+  description   String?
+  goalAmount    Float?
+  imageUrl      String?
+  sortOrder     Int            @default(0)
+  visible       Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  contributions Contribution[]
+}
