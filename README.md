@@ -8,23 +8,65 @@ Instead of paying Zola, Honeyfund, or Hitchd 2.5–5% in fees, this is a config-
 
 ## Quick Start
 
-1. **Fork this repo**
+### 1. Fork & clone
 
-2. **Edit `src/config.ts`** with your details:
-   - Couple names, wedding date, personal message
-   - Payment handles (Venmo, Zelle, CashApp, Stripe)
-   - Fund goal amount
-   - Site password (share on your invitation)
+```bash
+git clone https://github.com/YOUR_USERNAME/honeymoon-fund.git
+cd honeymoon-fund
+npm install
+```
 
-3. **Add your photo** to `public/images/couple.jpg`
+### 2. Edit `src/config.ts`
 
-4. **Deploy to Vercel** — click the button below or connect your fork:
+Update with your couple names, wedding date, personal message, fund goal, and theme preferences. Payment handles are read from environment variables (next step).
 
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/honeymoon-fund)
+### 3. Create `.env.local`
 
-5. **(Optional)** Connect a custom domain (~$12/year)
+Copy the example below and fill in your values:
 
-6. **Print a QR code** on your wedding invitations with the URL and password
+```bash
+# Generate your password hash (replace "06-21-2026" with your chosen password):
+echo -n "06-21-2026" | shasum -a 256 | awk '{print $1}'
+
+# Then create .env.local with:
+NEXT_PUBLIC_SITE_PASSWORD_HASH=<output from above>
+NEXT_PUBLIC_VENMO_HANDLE=YourVenmoUsername
+NEXT_PUBLIC_ZELLE_EMAIL=you@example.com
+NEXT_PUBLIC_CASHAPP_HANDLE=$YourCashTag
+NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/your-link
+```
+
+| Variable | Required | How to get it |
+|----------|----------|---------------|
+| `NEXT_PUBLIC_SITE_PASSWORD_HASH` | Yes | SHA-256 hash of your site password (see command above) |
+| `NEXT_PUBLIC_VENMO_HANDLE` | If using Venmo | Your Venmo username (without the @) |
+| `NEXT_PUBLIC_ZELLE_EMAIL` | If using Zelle | Email or phone registered with Zelle |
+| `NEXT_PUBLIC_CASHAPP_HANDLE` | If using CashApp | Your $cashtag (without the $) |
+| `NEXT_PUBLIC_STRIPE_PAYMENT_LINK` | If using Stripe | Create a Payment Link at [dashboard.stripe.com/payment-links](https://dashboard.stripe.com/payment-links) |
+
+### 4. Add your photo
+
+Replace `public/images/couple.jpg` with your own photo.
+
+### 5. Run locally
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). The default password is `06-21-2026`.
+
+### 6. Deploy to Vercel
+
+Click the button or connect your fork in the Vercel dashboard:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/abrostoff2/honeymoon-fund)
+
+**Important:** After deploying, add your environment variables in **Vercel → Settings → Environment Variables**. The `.env.local` file is gitignored and won't be available on Vercel automatically.
+
+### 7. (Optional) Custom domain & QR code
+
+Connect a custom domain (~$12/year) and print a QR code on your invitations with the URL and password.
 
 ## Payment Methods
 
@@ -44,14 +86,9 @@ Everything is configured in `src/config.ts`:
 - **Fund goal** — set to 0 to hide the progress bar
 - **Payment methods** — enable/disable any combination
 
-## Development
+## Security
 
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000). The default password is `06-14-2026`.
+The password gate uses a client-side SHA-256 hash comparison — it's designed for light obscurity (shared via QR code on invitations), not bank-level security. Don't put anything truly sensitive behind it.
 
 ## Build
 
