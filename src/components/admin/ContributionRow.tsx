@@ -119,13 +119,15 @@ export default function ContributionRow({
               >
                 {loading === "not_received" ? "..." : "Not Received"}
               </button>
-              <button
-                onClick={nudge}
-                disabled={!!loading}
-                className="cursor-pointer rounded bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100 disabled:opacity-50"
-              >
-                {loading === "nudge" ? "..." : "Nudge"}
-              </button>
+              {contribution.guestEmail && (
+                <button
+                  onClick={nudge}
+                  disabled={!!loading}
+                  className="cursor-pointer rounded bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100 disabled:opacity-50"
+                >
+                  {loading === "nudge" ? "..." : "Nudge"}
+                </button>
+              )}
             </>
           )}
           {contribution.status === "confirmed" && (

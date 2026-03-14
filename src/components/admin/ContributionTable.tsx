@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import ContributionRow from "./ContributionRow";
+import AddContributionModal from "./AddContributionModal";
 
 interface Contribution {
   id: string;
@@ -22,6 +23,7 @@ export default function ContributionTable() {
   const [contributions, setContributions] = useState<Contribution[]>([]);
   const [filter, setFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const load = useCallback(async () => {
     const res = await fetch("/api/contributions");
@@ -64,6 +66,14 @@ export default function ContributionTable() {
         <span className="text-sm text-gray-400">
           {filtered.length} contribution{filtered.length !== 1 ? "s" : ""}
         </span>
+        <div className="ml-auto">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="cursor-pointer rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-800"
+          >
+            + Add Contribution
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
@@ -109,6 +119,13 @@ export default function ContributionTable() {
           </tbody>
         </table>
       </div>
+
+      {showAddModal && (
+        <AddContributionModal
+          onClose={() => setShowAddModal(false)}
+          onAdded={load}
+        />
+      )}
     </div>
   );
 }
