@@ -66,32 +66,28 @@ export default function EcardPicker({
         ))}
       </div>
 
-      {selected && (
-        <>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-[#2C2C2C]/70">
-              Card message
-            </label>
-            <textarea
-              value={ecardMessage}
-              onChange={(e) => onMessageChange(e.target.value)}
-              rows={2}
-              className="w-full resize-none rounded-lg border border-[#2C2C2C]/10 px-4 py-3 text-sm text-[#2C2C2C] outline-none focus:border-[#2D8B6E] focus:ring-1 focus:ring-[#2D8B6E]"
-              placeholder="Write a message for your card..."
-            />
-          </div>
+      <div>
+        <label className="mb-1 block text-sm font-medium text-[#2C2C2C]/70">
+          Your message (optional)
+        </label>
+        <textarea
+          value={ecardMessage}
+          onChange={(e) => onMessageChange(e.target.value)}
+          rows={2}
+          className="w-full resize-none rounded-lg border border-[#2C2C2C]/10 px-4 py-3 text-sm text-[#2C2C2C] outline-none focus:border-[#2D8B6E] focus:ring-1 focus:ring-[#2D8B6E]"
+          placeholder="Congratulations! Have an amazing trip..."
+        />
+      </div>
 
-          {SelectedComponent && (
-            <div>
-              <p className="mb-2 text-xs text-[#2C2C2C]/40">Preview</p>
-              <SelectedComponent
-                guestName={guestName}
-                coupleName={config.coupleName}
-                message={ecardMessage}
-              />
-            </div>
-          )}
-        </>
+      {selected && SelectedComponent && (
+        <div>
+          <p className="mb-2 text-xs text-[#2C2C2C]/40">Preview</p>
+          <SelectedComponent
+            guestName={guestName}
+            coupleName={config.coupleName}
+            message={ecardMessage}
+          />
+        </div>
       )}
 
       <button

@@ -25,7 +25,6 @@ interface GuestData {
   message: string;
   paymentMethod: string;
   ecardTemplate: string | null;
-  ecardMessage: string;
   contributionId: string | null;
   fundItem: SelectedFundItem | null;
 }
@@ -42,7 +41,6 @@ export default function FundCard() {
     message: "",
     paymentMethod: "",
     ecardTemplate: null,
-    ecardMessage: "",
     contributionId: null,
     fundItem: null,
   });
@@ -87,7 +85,7 @@ export default function FundCard() {
           message: guest.message || null,
           paymentMethod: guest.paymentMethod,
           ecardTemplate: guest.ecardTemplate,
-          ecardMessage: guest.ecardMessage || null,
+          ecardMessage: guest.message || null,
           fundItemId: guest.fundItem?.id || null,
         }),
       });
@@ -221,11 +219,9 @@ export default function FundCard() {
             <GuestInfoForm
               name={guest.name}
               email={guest.email}
-              message={guest.message}
               paymentMethod={guest.paymentMethod}
               onNameChange={(v) => setGuest((g) => ({ ...g, name: v }))}
               onEmailChange={(v) => setGuest((g) => ({ ...g, email: v }))}
-              onMessageChange={(v) => setGuest((g) => ({ ...g, message: v }))}
               onPaymentMethodChange={(v) =>
                 setGuest((g) => ({ ...g, paymentMethod: v }))
               }
@@ -257,13 +253,13 @@ export default function FundCard() {
 
             <EcardPicker
               selected={guest.ecardTemplate}
-              ecardMessage={guest.ecardMessage}
+              ecardMessage={guest.message}
               guestName={guest.name}
               onSelect={(id) =>
                 setGuest((g) => ({ ...g, ecardTemplate: id }))
               }
               onMessageChange={(msg) =>
-                setGuest((g) => ({ ...g, ecardMessage: msg }))
+                setGuest((g) => ({ ...g, message: msg }))
               }
               onContinue={handleEcardContinue}
               onBack={() => setStep("info")}

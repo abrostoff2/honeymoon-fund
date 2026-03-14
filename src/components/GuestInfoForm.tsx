@@ -6,11 +6,9 @@ import { useSiteSettings } from "./SiteSettingsProvider";
 interface GuestInfoFormProps {
   name: string;
   email: string;
-  message: string;
   paymentMethod: string;
   onNameChange: (v: string) => void;
   onEmailChange: (v: string) => void;
-  onMessageChange: (v: string) => void;
   onPaymentMethodChange: (v: string) => void;
   onSubmit: () => void;
   onBack: () => void;
@@ -29,11 +27,9 @@ function usePaymentMethods() {
 export default function GuestInfoForm({
   name,
   email,
-  message,
   paymentMethod,
   onNameChange,
   onEmailChange,
-  onMessageChange,
   onPaymentMethodChange,
   onSubmit,
   onBack,
@@ -82,19 +78,6 @@ export default function GuestInfoForm({
           required
           className="w-full rounded-lg border border-[#2C2C2C]/10 px-4 py-3 text-[#2C2C2C] outline-none focus:border-[#2D8B6E] focus:ring-1 focus:ring-[#2D8B6E]"
           placeholder="jane@example.com"
-        />
-      </div>
-
-      <div>
-        <label className="mb-1 block text-sm font-medium text-[#2C2C2C]/70">
-          Personal message (optional)
-        </label>
-        <textarea
-          value={message}
-          onChange={(e) => onMessageChange(e.target.value)}
-          rows={3}
-          className="w-full resize-none rounded-lg border border-[#2C2C2C]/10 px-4 py-3 text-[#2C2C2C] outline-none focus:border-[#2D8B6E] focus:ring-1 focus:ring-[#2D8B6E]"
-          placeholder="Congratulations! Have an amazing trip..."
         />
       </div>
 
