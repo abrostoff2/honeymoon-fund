@@ -54,6 +54,7 @@ export default function AdminAuthGate({
   const [loading, setLoading] = useState(true);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
 
   useEffect(() => {
     fetch("/api/admin/auth")
@@ -62,6 +63,32 @@ export default function AdminAuthGate({
       })
       .finally(() => setLoading(false));
   }, []);
+
+  async function handleGoogleSignIn() {
+    setSigningIn(true);
+    // Fetch CSRF token from NextAuth, then POST to sign in with Google
+    const csrfRes = await fetch("/api/auth/csrf");
+    const { csrfToken } = await csrfRes.json();
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/api/auth/signin/google";
+
+    const csrfInput = document.createElement("input");
+    csrfInput.type = "hidden";
+    csrfInput.name = "csrfToken";
+    csrfInput.value = csrfToken;
+    form.appendChild(csrfInput);
+
+    const callbackInput = document.createElement("input");
+    callbackInput.type = "hidden";
+    callbackInput.name = "callbackUrl";
+    callbackInput.value = "/admin";
+    form.appendChild(callbackInput);
+
+    document.body.appendChild(form);
+    form.submit();
+  }
 
   async function handlePasswordSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -108,13 +135,14 @@ export default function AdminAuthGate({
           </div>
 
           {ssoEnabled ? (
-            <a
-              href="/api/auth/signin?callbackUrl=/admin"
-              className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            <button
+              onClick={handleGoogleSignIn}
+              disabled={signingIn}
+              className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
             >
               <GoogleIcon />
-              Continue with Google
-            </a>
+              {signingIn ? "Redirecting..." : "Continue with Google"}
+            </button>
           ) : (
             <form onSubmit={handlePasswordSubmit} className="space-y-4">
               <input
