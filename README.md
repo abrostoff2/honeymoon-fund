@@ -101,7 +101,7 @@ After deploying, visit `/admin` to:
 ## Tech Stack
 
 - Next.js 16 (App Router, Turbopack)
-- SQLite + Prisma 7
+- SQLite (local) / Turso (production) + Prisma 7
 - Tailwind CSS v4
 - NextAuth v5 (optional Google SSO)
 - Resend (optional email notifications)

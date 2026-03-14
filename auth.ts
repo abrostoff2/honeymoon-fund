@@ -8,10 +8,16 @@ const allowedEmails = (process.env.ADMIN_EMAILS ?? "")
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [Google],
+  pages: {
+    error: "/auth/error",
+  },
   callbacks: {
     async signIn({ profile }) {
-      if (!profile?.email) return false;
-      return allowedEmails.includes(profile.email.toLowerCase());
+      if (!profile?.email) return "/auth/error?reason=no-email";
+      if (!allowedEmails.includes(profile.email.toLowerCase())) {
+        return `/auth/error?reason=not-authorized&email=${encodeURIComponent(profile.email)}`;
+      }
+      return true;
     },
   },
 });

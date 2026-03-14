@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import StatusBadge from "./StatusBadge";
+import EditContributionModal from "./EditContributionModal";
 
 interface Contribution {
   id: string;
@@ -28,6 +29,7 @@ export default function ContributionRow({
   onUpdate,
 }: ContributionRowProps) {
   const [loading, setLoading] = useState("");
+  const [showEdit, setShowEdit] = useState(false);
 
   async function updateStatus(status: string) {
     setLoading(status);
@@ -149,6 +151,13 @@ export default function ContributionRow({
             </button>
           )}
           <button
+            onClick={() => setShowEdit(true)}
+            disabled={!!loading}
+            className="cursor-pointer rounded bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-50"
+          >
+            Edit
+          </button>
+          <button
             onClick={handleDelete}
             disabled={!!loading}
             className="cursor-pointer rounded bg-red-50 px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-100 disabled:opacity-50"
@@ -157,6 +166,13 @@ export default function ContributionRow({
           </button>
         </div>
       </td>
+      {showEdit && (
+        <EditContributionModal
+          contribution={contribution}
+          onClose={() => setShowEdit(false)}
+          onSaved={onUpdate}
+        />
+      )}
     </tr>
   );
 }

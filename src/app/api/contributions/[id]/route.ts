@@ -28,6 +28,10 @@ export async function PATCH(
 
   if (body.amount !== undefined) updateData.amount = body.amount;
   if (body.notes !== undefined) updateData.notes = body.notes;
+  if (body.guestName !== undefined) updateData.guestName = body.guestName;
+  if (body.guestEmail !== undefined) updateData.guestEmail = body.guestEmail;
+  if (body.paymentMethod !== undefined) updateData.paymentMethod = body.paymentMethod;
+  if (body.message !== undefined) updateData.message = body.message;
 
   const contribution = await prisma.contribution.update({
     where: { id },

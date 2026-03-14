@@ -65,7 +65,7 @@ Ask: "Want Google sign-in for the admin dashboard, or just a password?" If SSO:
 2. Authorized redirect: `http://localhost:3000/api/auth/callback/google` (+ production URL later)
 3. Collect client ID and secret
 
-→ Write to `.env.local`: AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET, ADMIN_EMAILS, NEXT_PUBLIC_ADMIN_SSO_ENABLED=true
+→ Write to `.env.local`: AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET, AUTH_SECRET (generate with `openssl rand -base64 32`), ADMIN_EMAILS, NEXT_PUBLIC_ADMIN_SSO_ENABLED=true
 
 ### Step 7: Initialize & Test
 
