@@ -15,7 +15,6 @@ export interface SiteSettings {
     venmo: { enabled: boolean; handle: string };
     zelle: { enabled: boolean; email: string };
     cashapp: { enabled: boolean; handle: string };
-    stripe: { enabled: boolean; paymentLink: string };
   };
 }
 
@@ -32,7 +31,6 @@ const defaultSettings: SiteSettings = {
     venmo: { enabled: config.payments.venmo.enabled, handle: config.payments.venmo.handle ?? "" },
     zelle: { enabled: config.payments.zelle.enabled, email: config.payments.zelle.email ?? "" },
     cashapp: { enabled: config.payments.cashapp.enabled, handle: config.payments.cashapp.handle ?? "" },
-    stripe: { enabled: config.payments.stripe.enabled, paymentLink: config.payments.stripe.paymentLink ?? "" },
   },
 };
 

@@ -15,8 +15,6 @@ export const SETTING_KEYS = {
   zelleEmail: "zelle_email",
   cashappEnabled: "cashapp_enabled",
   cashappHandle: "cashapp_handle",
-  stripeEnabled: "stripe_enabled",
-  stripePaymentLink: "stripe_payment_link",
   fundItemsEnabled: "fund_items_enabled",
 } as const;
 
@@ -37,8 +35,6 @@ function getDefault(key: SettingKey): string {
     case "zelle_email": return config.payments.zelle.email ?? "";
     case "cashapp_enabled": return String(config.payments.cashapp.enabled);
     case "cashapp_handle": return config.payments.cashapp.handle ?? "";
-    case "stripe_enabled": return String(config.payments.stripe.enabled);
-    case "stripe_payment_link": return config.payments.stripe.paymentLink ?? "";
     case "fund_items_enabled": return process.env.NEXT_PUBLIC_FUND_ITEMS_ENABLED ?? "false";
     default: return "";
   }

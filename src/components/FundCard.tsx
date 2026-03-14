@@ -250,9 +250,7 @@ export default function FundCard() {
                     ? "Venmo"
                     : guest.paymentMethod === "zelle"
                       ? "Zelle"
-                      : guest.paymentMethod === "cashapp"
-                        ? "Cash App"
-                        : "Card"}
+                      : "Cash App"}
                 </div>
               </div>
             </div>

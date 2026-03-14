@@ -17,7 +17,6 @@ export async function GET() {
       venmo: { enabled: s.venmo_enabled === "true", handle: s.venmo_handle },
       zelle: { enabled: s.zelle_enabled === "true", email: s.zelle_email },
       cashapp: { enabled: s.cashapp_enabled === "true", handle: s.cashapp_handle },
-      stripe: { enabled: s.stripe_enabled === "true", paymentLink: s.stripe_payment_link },
     },
   });
 }

@@ -37,7 +37,6 @@ Ask: "Which payment methods do you want to accept?" Then for each enabled one, a
 - **Venmo** → handle (without @)
 - **Zelle** → registered email or phone
 - **CashApp** → $cashtag (without $)
-- **Stripe** (card/Apple Pay) → if yes, guide them to create a Payment Link at dashboard.stripe.com/payment-links. They paste back the URL.
 
 → Update `.env.local` and set enabled flags in `src/config.ts`
 
@@ -102,4 +101,4 @@ When the user wants to change something after setup:
 - **Content** (names, dates, messages, payment handles, fund details) → suggest the admin UI at `/admin/settings`, or edit directly if they prefer
 - **Visual** (colors, fonts, hero image) → edit `src/config.ts` or swap the image file
 - **Infrastructure** (passwords, API keys, new payment methods) → edit `.env.local` and remind them to update Vercel env vars
-- **Adding Stripe/SSO/Email after initial setup** → run the relevant optional step from the setup flow above
+- **Adding SSO/Email after initial setup** → run the relevant optional step from the setup flow above

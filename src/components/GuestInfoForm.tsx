@@ -23,7 +23,6 @@ function usePaymentMethods() {
     { key: "venmo", label: "Venmo", enabled: settings.payments.venmo.enabled },
     { key: "zelle", label: "Zelle", enabled: settings.payments.zelle.enabled },
     { key: "cashapp", label: "Cash App", enabled: settings.payments.cashapp.enabled },
-    { key: "stripe", label: "Card / Apple Pay", enabled: settings.payments.stripe.enabled },
   ];
 }
 

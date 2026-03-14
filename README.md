@@ -2,7 +2,7 @@
 
 An open-source honeymoon fund website that couples can deploy in minutes — zero platform fees.
 
-Instead of paying Zola, Honeyfund, or Hitchd 2.5–5% in fees, this is a config-driven Next.js template where payments go directly to you via Venmo/Zelle/CashApp (free) or Stripe Payment Links (~3% processing).
+Instead of paying Zola, Honeyfund, or Hitchd 2.5–5% in fees, this is a config-driven Next.js template where payments go directly to you via Venmo, Zelle, or CashApp — completely free.
 
 **Total cost: $0** (or ~$12/year for a custom domain).
 
@@ -89,7 +89,6 @@ After deploying, visit `/admin` to:
 | Venmo | **$0** | Deep link opens app with note pre-filled |
 | CashApp | **$0** | Deep link opens app |
 | Zelle | **$0** | Displays your registered email/phone |
-| Card / Apple Pay | **~3%** | Stripe Payment Link — money goes to your bank |
 
 ## Features
 

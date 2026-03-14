@@ -3,7 +3,6 @@ export interface PaymentMethod {
   handle?: string;
   email?: string;
   note?: string;
-  paymentLink?: string;
 }
 
 export interface FundConfig {
@@ -27,7 +26,6 @@ export interface FundConfig {
     venmo: PaymentMethod;
     zelle: PaymentMethod;
     cashapp: PaymentMethod;
-    stripe: PaymentMethod;
   };
 
   // Theming
@@ -69,10 +67,6 @@ export const config: FundConfig = {
     cashapp: {
       enabled: false,
       handle: process.env.NEXT_PUBLIC_CASHAPP_HANDLE ?? "",
-    },
-    stripe: {
-      enabled: true,
-      paymentLink: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK ?? "",
     },
   },
 

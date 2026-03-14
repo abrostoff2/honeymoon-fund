@@ -15,8 +15,6 @@ interface Settings {
   zelle_email: string;
   cashapp_enabled: string;
   cashapp_handle: string;
-  stripe_enabled: string;
-  stripe_payment_link: string;
   fund_items_enabled: string;
 }
 
@@ -261,21 +259,6 @@ export default function SettingsPage() {
           )}
         </div>
 
-        <div className="space-y-4 rounded-lg bg-gray-50 p-4">
-          <Toggle
-            label="Card / Apple Pay (Stripe)"
-            checked={settings.stripe_enabled === "true"}
-            onChange={(v) => update("stripe_enabled", String(v))}
-          />
-          {settings.stripe_enabled === "true" && (
-            <Field
-              label="Stripe Payment Link"
-              value={settings.stripe_payment_link}
-              onChange={(v) => update("stripe_payment_link", v)}
-              placeholder="https://buy.stripe.com/..."
-            />
-          )}
-        </div>
       </section>
 
       <p className="text-sm text-gray-400">

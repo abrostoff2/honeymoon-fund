@@ -25,8 +25,6 @@ function getPaymentDetail(method: string): string {
       return `${config.payments.zelle.email} via Zelle`;
     case "cashapp":
       return `$${config.payments.cashapp.handle} on Cash App`;
-    case "stripe":
-      return "Card / Apple Pay (link on the fund page)";
     default:
       return method;
   }
@@ -36,7 +34,6 @@ const methodLabels: Record<string, string> = {
   venmo: "Venmo",
   zelle: "Zelle",
   cashapp: "Cash App",
-  stripe: "Card / Apple Pay",
 };
 
 export async function sendContributionNotification(

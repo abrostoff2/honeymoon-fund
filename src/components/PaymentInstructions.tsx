@@ -66,9 +66,7 @@ export default function PaymentInstructions({
             ? "Venmo"
             : paymentMethod === "zelle"
               ? "Zelle"
-              : paymentMethod === "cashapp"
-                ? "Cash App"
-                : "Card"}
+              : "Cash App"}
         </div>
       </div>
 
@@ -114,22 +112,6 @@ export default function PaymentInstructions({
           </div>
         )}
 
-        {paymentMethod === "stripe" && (
-          <div className="space-y-3 text-center">
-            <p className="text-sm font-medium" style={{ color: "#2D8B6E" }}>
-              Complete payment via card or Apple Pay
-            </p>
-            <a
-              href={settings.payments.stripe.paymentLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full rounded-lg bg-[#3C3C3C] px-6 py-3 text-center text-sm font-medium text-white transition-opacity hover:opacity-90"
-            >
-              Pay with Card / Apple Pay
-            </a>
-            <p className="text-xs text-[#2C2C2C]/40">~3% processing fee</p>
-          </div>
-        )}
       </div>
 
       <p className="text-center text-xs text-[#2C2C2C]/40">
