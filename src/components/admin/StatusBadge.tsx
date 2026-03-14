@@ -1,7 +1,7 @@
 const statusStyles: Record<string, string> = {
-  pending: "bg-amber-100 text-amber-700",
-  confirmed: "bg-green-100 text-green-700",
-  not_received: "bg-red-100 text-red-700",
+  pending: "border-amber-200 bg-amber-50 text-amber-700",
+  confirmed: "border-green-200 bg-green-50 text-green-700",
+  not_received: "border-red-200 bg-red-50 text-red-700",
 };
 
 const statusLabels: Record<string, string> = {
@@ -13,8 +13,8 @@ const statusLabels: Record<string, string> = {
 export default function StatusBadge({ status }: { status: string }) {
   return (
     <span
-      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-        statusStyles[status] ?? "bg-gray-100 text-gray-700"
+      className={`inline-block rounded-full border px-3 py-1 text-xs font-medium ${
+        statusStyles[status] ?? "border-gray-200 bg-gray-50 text-gray-700"
       }`}
     >
       {statusLabels[status] ?? status}

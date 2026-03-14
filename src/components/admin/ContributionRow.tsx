@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import StatusBadge from "./StatusBadge";
 import EditContributionModal from "./EditContributionModal";
 
@@ -24,155 +25,96 @@ interface ContributionRowProps {
   onUpdate: () => void;
 }
 
+const INITIALS_COLORS = [
+  "bg-indigo-100 text-indigo-600",
+  "bg-emerald-100 text-emerald-600",
+  "bg-amber-100 text-amber-600",
+  "bg-rose-100 text-rose-600",
+  "bg-cyan-100 text-cyan-600",
+  "bg-violet-100 text-violet-600",
+  "bg-orange-100 text-orange-600",
+  "bg-teal-100 text-teal-600",
+];
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+}
+
+function getInitialsColor(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return INITIALS_COLORS[Math.abs(hash) % INITIALS_COLORS.length];
+}
+
 export default function ContributionRow({
   contribution,
   onUpdate,
 }: ContributionRowProps) {
-  const [loading, setLoading] = useState("");
   const [showEdit, setShowEdit] = useState(false);
 
-  async function updateStatus(status: string) {
-    setLoading(status);
-    await fetch(`/api/contributions/${contribution.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
-    });
-    setLoading("");
-    onUpdate();
-  }
-
-  async function nudge() {
-    setLoading("nudge");
-    await fetch(`/api/contributions/${contribution.id}/nudge`, {
-      method: "POST",
-    });
-    setLoading("");
-    alert("Reminder sent!");
-  }
-
-  async function handleDelete() {
-    if (!confirm(`Delete contribution from ${contribution.guestName} ($${contribution.amount})?`)) return;
-    setLoading("delete");
-    await fetch(`/api/contributions/${contribution.id}`, {
-      method: "DELETE",
-    });
-    setLoading("");
-    onUpdate();
-  }
-
-  const date = new Date(contribution.createdAt).toLocaleDateString();
+  const initials = getInitials(contribution.guestName);
+  const color = getInitialsColor(contribution.guestName);
+  const date = new Date(contribution.createdAt).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
 
   return (
-    <tr className="border-b border-gray-100 last:border-0">
-      <td className="px-4 py-3">
-        <div className="truncate font-medium text-gray-900">
-          {contribution.guestName}
-        </div>
-        <div className="truncate text-xs text-gray-400">{contribution.guestEmail}</div>
-      </td>
-      <td className="px-4 py-3">
-        <div className="font-medium text-gray-900">
-          ${contribution.amount.toLocaleString()}
-        </div>
-        {contribution.fundItem && (
-          <div className="truncate text-xs text-gray-400">
-            {contribution.fundItem.title}
+    <tr className="border-b border-gray-100 last:border-0 hover:bg-gray-50/50">
+      <td className="px-5 py-4">
+        <div className="flex items-center gap-3">
+          <div
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-semibold ${color}`}
+          >
+            {initials}
           </div>
-        )}
+          <div className="min-w-0">
+            <div className="truncate font-medium text-gray-900">
+              {contribution.guestName}
+            </div>
+            {contribution.guestEmail && (
+              <div className="truncate text-sm text-gray-400">
+                {contribution.guestEmail}
+              </div>
+            )}
+          </div>
+        </div>
       </td>
-      <td className="px-4 py-3 capitalize text-gray-600">
-        {contribution.paymentMethod}
+      <td className="px-5 py-4 font-medium text-gray-900">
+        ${contribution.amount.toLocaleString()}
       </td>
-      <td className="px-4 py-3">
+      <td className="px-5 py-4 text-gray-500">{date}</td>
+      <td className="px-5 py-4 capitalize text-gray-600">
+        {contribution.paymentMethod.replace("_", " ")}
+      </td>
+      <td className="px-5 py-4">
         <StatusBadge status={contribution.status} />
       </td>
-      <td className="px-4 py-3 text-gray-500">{date}</td>
-      <td className="px-4 py-3 text-gray-500">
-        <div className="truncate">
-          {contribution.message && (
-            <span title={contribution.message}>
-              {contribution.message.slice(0, 30)}
-              {contribution.message.length > 30 ? "..." : ""}
-            </span>
-          )}
-          {contribution.ecardTemplate && (
-            <span className="ml-1" title={`E-card: ${contribution.ecardTemplate}`}>
-              🎴
-            </span>
-          )}
-        </div>
+      <td className="px-5 py-4 text-right">
+        <button
+          onClick={() => setShowEdit(true)}
+          className="cursor-pointer rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zM16.862 4.487L19.5 7.125" />
+          </svg>
+        </button>
       </td>
-      <td className="px-4 py-3">
-        <div className="flex flex-wrap gap-1">
-          {contribution.status === "pending" && (
-            <>
-              <button
-                onClick={() => updateStatus("confirmed")}
-                disabled={!!loading}
-                className="cursor-pointer rounded bg-green-50 px-2 py-1 text-xs font-medium text-green-700 hover:bg-green-100 disabled:opacity-50"
-              >
-                {loading === "confirmed" ? "..." : "Confirm"}
-              </button>
-              <button
-                onClick={() => updateStatus("not_received")}
-                disabled={!!loading}
-                className="cursor-pointer rounded bg-red-50 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-100 disabled:opacity-50"
-              >
-                {loading === "not_received" ? "..." : "Not Received"}
-              </button>
-              {contribution.guestEmail && (
-                <button
-                  onClick={nudge}
-                  disabled={!!loading}
-                  className="cursor-pointer rounded bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100 disabled:opacity-50"
-                >
-                  {loading === "nudge" ? "..." : "Nudge"}
-                </button>
-              )}
-            </>
-          )}
-          {contribution.status === "confirmed" && (
-            <button
-              onClick={() => updateStatus("pending")}
-              disabled={!!loading}
-              className="cursor-pointer rounded bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-50"
-            >
-              Undo
-            </button>
-          )}
-          {contribution.status === "not_received" && (
-            <button
-              onClick={() => updateStatus("pending")}
-              disabled={!!loading}
-              className="cursor-pointer rounded bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-50"
-            >
-              Back to Pending
-            </button>
-          )}
-          <button
-            onClick={() => setShowEdit(true)}
-            disabled={!!loading}
-            className="cursor-pointer rounded bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-50"
-          >
-            Edit
-          </button>
-          <button
-            onClick={handleDelete}
-            disabled={!!loading}
-            className="cursor-pointer rounded bg-red-50 px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-100 disabled:opacity-50"
-          >
-            {loading === "delete" ? "..." : "Delete"}
-          </button>
-        </div>
-      </td>
-      {showEdit && (
-        <EditContributionModal
-          contribution={contribution}
-          onClose={() => setShowEdit(false)}
-          onSaved={onUpdate}
-        />
-      )}
+      {showEdit &&
+        createPortal(
+          <EditContributionModal
+            contribution={contribution}
+            onClose={() => setShowEdit(false)}
+            onSaved={onUpdate}
+          />,
+          document.body
+        )}
     </tr>
   );
 }
