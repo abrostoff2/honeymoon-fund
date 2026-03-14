@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyAdminAuth } from "@/lib/auth";
 import { getAllSettings, setSettings } from "@/lib/settings";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const isAdmin = await verifyAdminAuth();
   if (!isAdmin) {

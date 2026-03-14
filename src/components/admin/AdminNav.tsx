@@ -2,18 +2,35 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
 const ssoEnabled = process.env.NEXT_PUBLIC_ADMIN_SSO_ENABLED === "true";
 
-const links = [
-  { href: "/admin", label: "Overview" },
-  { href: "/admin/contributions", label: "Contributions" },
-  { href: "/admin/fund-items", label: "Fund Items" },
-  { href: "/admin/settings", label: "Settings" },
-];
-
 export default function AdminNav() {
   const pathname = usePathname();
+  const [fundItemsEnabled, setFundItemsEnabled] = useState(false);
+
+  const loadSettings = useCallback(() => {
+    fetch("/api/public-settings")
+      .then((res) => res.json())
+      .then((data) => setFundItemsEnabled(data.fundItemsEnabled ?? false))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    loadSettings();
+    window.addEventListener("settings-updated", loadSettings);
+    return () => window.removeEventListener("settings-updated", loadSettings);
+  }, [loadSettings]);
+
+  const links = [
+    { href: "/admin", label: "Overview" },
+    { href: "/admin/contributions", label: "Contributions" },
+    ...(fundItemsEnabled
+      ? [{ href: "/admin/fund-items", label: "Fund Items" }]
+      : []),
+    { href: "/admin/settings", label: "Settings" },
+  ];
 
   async function handleLogout() {
     if (ssoEnabled) {

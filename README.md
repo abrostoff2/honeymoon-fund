@@ -6,7 +6,20 @@ Instead of paying Zola, Honeyfund, or Hitchd 2.5–5% in fees, this is a config-
 
 **Total cost: $0** (or ~$12/year for a custom domain).
 
-## Quick Start
+## Setup with Claude Code (Recommended)
+
+The fastest way to set up your honeymoon fund:
+
+1. Fork & clone this repo
+2. Open it with [Claude Code](https://claude.com/claude-code)
+3. Say **"help me set up"**
+
+Claude walks you through everything — personalizing the site, configuring payments, setting passwords, and deploying to Vercel. No need to read docs or edit config files manually.
+
+## Manual Setup
+
+<details>
+<summary>Click to expand manual setup steps</summary>
 
 ### 1. Fork & clone
 
@@ -18,55 +31,56 @@ npm install
 
 ### 2. Edit `src/config.ts`
 
-Update with your couple names, wedding date, personal message, fund goal, and theme preferences. Payment handles are read from environment variables (next step).
+Update with your couple names, wedding date, personal message, fund goal, and theme preferences.
 
 ### 3. Create `.env.local`
 
-Copy the example below and fill in your values:
-
 ```bash
-# Generate your password hash (replace "06-21-2026" with your chosen password):
-echo -n "06-21-2026" | shasum -a 256 | awk '{print $1}'
-
-# Then create .env.local with:
-NEXT_PUBLIC_SITE_PASSWORD_HASH=<output from above>
-NEXT_PUBLIC_VENMO_HANDLE=YourVenmoUsername
-NEXT_PUBLIC_ZELLE_EMAIL=you@example.com
-NEXT_PUBLIC_CASHAPP_HANDLE=$YourCashTag
-NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/your-link
+cp .env.example .env.local
 ```
 
-| Variable | Required | How to get it |
-|----------|----------|---------------|
-| `NEXT_PUBLIC_SITE_PASSWORD_HASH` | Yes | SHA-256 hash of your site password (see command above) |
-| `NEXT_PUBLIC_VENMO_HANDLE` | If using Venmo | Your Venmo username (without the @) |
-| `NEXT_PUBLIC_ZELLE_EMAIL` | If using Zelle | Email or phone registered with Zelle |
-| `NEXT_PUBLIC_CASHAPP_HANDLE` | If using CashApp | Your $cashtag (without the $) |
-| `NEXT_PUBLIC_STRIPE_PAYMENT_LINK` | If using Stripe | Create a Payment Link at [dashboard.stripe.com/payment-links](https://dashboard.stripe.com/payment-links) |
+Fill in your values. Generate password hashes with:
+
+```bash
+echo -n "your-password" | shasum -a 256 | awk '{print $1}'
+```
 
 ### 4. Add your photo
 
 Replace `public/images/couple.jpg` with your own photo.
 
-### 5. Run locally
+### 5. Set up the database
+
+```bash
+npx prisma migrate dev
+```
+
+### 6. Run locally
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The default password is `06-21-2026`.
-
-### 6. Deploy to Vercel
-
-Click the button or connect your fork in the Vercel dashboard:
+### 7. Deploy to Vercel
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/abrostoff2/honeymoon-fund)
 
-**Important:** After deploying, add your environment variables in **Vercel → Settings → Environment Variables**. The `.env.local` file is gitignored and won't be available on Vercel automatically.
+Add your `.env.local` variables in **Vercel → Settings → Environment Variables**.
 
-### 7. (Optional) Custom domain & QR code
+### 8. (Optional) Custom domain & QR code
 
-Connect a custom domain (~$12/year) and print a QR code on your invitations with the URL and password.
+Connect a custom domain (~$12/year) and print a QR code on your invitations.
+
+</details>
+
+## Admin Dashboard
+
+After deploying, visit `/admin` to:
+
+- Track contributions (who gave, how much, payment status)
+- Confirm or nudge pending payments
+- Manage fund items (specific honeymoon experiences guests can fund)
+- Edit site settings (couple info, payment methods, fund details)
 
 ## Payment Methods
 
@@ -77,33 +91,21 @@ Connect a custom domain (~$12/year) and print a QR code on your invitations with
 | Zelle | **$0** | Displays your registered email/phone |
 | Card / Apple Pay | **~3%** | Stripe Payment Link — money goes to your bank |
 
-## Customization
+## Features
 
-Everything is configured in `src/config.ts`:
-
-- **Theme colors** — primary accent, background color
-- **Font style** — serif (elegant) or sans-serif (modern)
-- **Fund goal** — set to 0 to hide the progress bar
-- **Payment methods** — enable/disable any combination
-
-## Security
-
-The password gate uses a client-side SHA-256 hash comparison — it's designed for light obscurity (shared via QR code on invitations), not bank-level security. Don't put anything truly sensitive behind it.
-
-## Build
-
-```bash
-npm run build
-```
-
-Generates a fully static site in `out/` — no server needed.
+- Guest contribution flow with name, email, message, and optional e-card
+- Email notifications to the couple when gifts come in
+- Admin SSO via Google (optional, password auth by default)
+- Mobile-friendly
+- Config-driven theming (colors, fonts)
 
 ## Tech Stack
 
-- Next.js 16 (App Router, static export)
-- TypeScript
+- Next.js 16 (App Router, Turbopack)
+- SQLite + Prisma 7
 - Tailwind CSS v4
-- Zero backend, zero database
+- NextAuth v5 (optional Google SSO)
+- Resend (optional email notifications)
 
 ## License
 

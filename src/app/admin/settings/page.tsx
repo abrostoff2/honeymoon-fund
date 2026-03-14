@@ -131,6 +131,7 @@ export default function SettingsPage() {
     });
     setSaving(false);
     setSaved(true);
+    window.dispatchEvent(new Event("settings-updated"));
     setTimeout(() => setSaved(false), 2000);
   }
 
